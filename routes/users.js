@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
   name: String,
   email: String,
   password: String,
+  bio: String,
   profileImage: String,
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
