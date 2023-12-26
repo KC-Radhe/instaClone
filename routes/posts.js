@@ -13,7 +13,7 @@ const postSchema = mongoose.Schema({
     likes: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'userData',
         }
     ]
 });

@@ -24,7 +24,7 @@ router.get('/feed', isLoggedIn,async function (req, res) {
 });
 
 router.get('/profile', isLoggedIn, async function (req, res) {
-  const user = await userModel.findOne({ username: req.session.passport.user});
+  const user = await userModel.findOne({ username: req.session.passport.user}).populate('posts');
   res.render('profile', { footer: true, user });
 });
 
@@ -39,6 +39,16 @@ router.get('/edit', isLoggedIn, async function (req, res) {
 
 router.get('/upload', isLoggedIn, function (req, res) {
   res.render('upload', { footer: true });
+});
+
+router.get('/logout', function(req, res){ 
+  res.redirect('/');
+});
+
+router.get('/username/:username', async function(req, res){ 
+  const regex = new RegExp(`^${req.params.username}`, 'i');
+  const users = await userModel.find({username: regex});
+  res.json(users);
 });
 
 router.post('/register', function (req, res) {
