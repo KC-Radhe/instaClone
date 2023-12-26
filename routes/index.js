@@ -18,9 +18,9 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/feed', isLoggedIn,async function (req, res) {
-  // const user = await userModel.findOne({username: req.session.passport.user});
+  const user = await userModel.findOne({username: req.session.passport.user});
   const posts = await postModel.find().populate('user');
-  res.render('feed', { footer: true, posts});
+  res.render('feed', { footer: true, posts, user});
 });
 
 router.get('/profile', isLoggedIn, async function (req, res) {
@@ -49,6 +49,21 @@ router.get('/username/:username', async function(req, res){
   const regex = new RegExp(`^${req.params.username}`, 'i');
   const users = await userModel.find({username: regex});
   res.json(users);
+});
+
+router.get('/like/post/:id',isLoggedIn, async function(req, res){ 
+  const post = await postModel.findOne({ _id: req.params.id});
+  const user = await userModel.findOne({username: req.session.passport.user});
+
+  //if already liked remove like
+  //if not then, like it
+  if(post.likes.indexOf(user._id) === -1){
+    post.likes.push(user._id);
+  } else {
+    post.likes.splice(post.likes.indexOf(user._id), 1);
+  }
+  await post.save();
+  res.redirect('/feed');
 });
 
 router.post('/register', function (req, res) {
