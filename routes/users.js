@@ -17,4 +17,4 @@ const userSchema = mongoose.Schema({
 
 userSchema.plugin(plm);
 
-modeule.exports = mongoose.model('userData', userSchema);
+module.exports = mongoose.model('userData', userSchema);
